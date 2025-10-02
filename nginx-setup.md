@@ -74,8 +74,8 @@ tiktok-login-test/
 ### Quick Start
 ```bash
 # Set environment variables
-export TIKTOK_CLIENT_KEY="your_key"
-export TIKTOK_CLIENT_SECRET="your_secret"
+export TIKTOK_CLIENT_KEY="sbawscptfcgjaj8kxa"
+export TIKTOK_CLIENT_SECRET="Vowrg3Nafz8Tcb84Z46xfv5PlfG8YFAW"
 export TIKTOK_REDIRECT_URI="https://your-domain.com/api/callback"
 
 # Start services

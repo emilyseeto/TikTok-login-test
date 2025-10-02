@@ -20,7 +20,7 @@ app.get('/health', (req, res) => {
 // TikTok OAuth initiation endpoint
 app.get('/api/oauth', (req, res) => {
     // TikTok OAuth configuration
-    const CLIENT_KEY = process.env.TIKTOK_CLIENT_KEY || 'your_client_key_here';
+    const CLIENT_KEY = process.env.TIKTOK_CLIENT_KEY;
     const REDIRECT_URI = process.env.TIKTOK_REDIRECT_URI || `${req.protocol}://${req.get('host')}/api/callback`;
     const SCOPE = 'user.info.basic';
     
