@@ -6,7 +6,7 @@ window.TIKTOK_CONFIG = {
     clientKey: 'sbawscptfcgjaj8kxa',
     
     // Your app's redirect URI (must match what you configured in TikTok Developer Portal)
-    redirectUri: window.location.origin + '/api/callback',
+    redirectUri: window.location.origin,
     
     // OAuth scopes (comma-separated)
     scope: 'user.info.basic'

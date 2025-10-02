@@ -18,7 +18,7 @@ A simple web application that demonstrates TikTok OAuth login integration using 
 1. Go to [TikTok for Developers](https://developers.tiktok.com)
 2. Create a developer account and register your app
 3. Enable the Login Kit product for your app
-4. Configure your redirect URI (e.g., `https://your-domain.vercel.app/api/callback`)
+4. Configure your redirect URI (e.g., `https://tiktok-login-test-1nj0i2pve-emilyseetos-projects.vercel.app`)
 
 ### 2. Configuration
 
@@ -27,7 +27,7 @@ Update `config.js` with your TikTok app credentials:
 ```javascript
 window.TIKTOK_CONFIG = {
     clientKey: 'your_client_key_here', // From TikTok Developer Portal
-    redirectUri: 'https://your-domain.com/api/callback',
+    redirectUri: 'https://tiktok-login-test-1nj0i2pve-emilyseetos-projects.vercel.app',
     scope: 'user.info.basic'
 };
 ```
@@ -67,7 +67,7 @@ npm run dev
 
 1. **User clicks "Continue with TikTok"** → JavaScript function calls TikTok authorization API directly
 2. **Direct API call** → Generates state token and redirects to TikTok authorization
-3. **User authorizes on TikTok** → TikTok redirects to `/api/callback`
+3. **User authorizes on TikTok** → TikTok redirects
 4. **Callback handler** → Exchanges code for access token and gets user info
 5. **Success response** → Redirects back to main page with login data
 

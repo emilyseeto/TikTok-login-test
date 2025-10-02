@@ -76,7 +76,7 @@ tiktok-login-test/
 # Set environment variables
 export TIKTOK_CLIENT_KEY="sbawscptfcgjaj8kxa"
 export TIKTOK_CLIENT_SECRET="Vowrg3Nafz8Tcb84Z46xfv5PlfG8YFAW"
-export TIKTOK_REDIRECT_URI="https://your-domain.com/api/callback"
+export TIKTOK_REDIRECT_URI="https://tiktok-login-test-1nj0i2pve-emilyseetos-projects.vercel.app"
 
 # Start services
 docker-compose up -d
@@ -108,7 +108,7 @@ Use a reverse proxy like Traefik or Nginx Proxy Manager for automatic SSL.
 ```bash
 TIKTOK_CLIENT_KEY=your_client_key_here
 TIKTOK_CLIENT_SECRET=your_client_secret_here
-TIKTOK_REDIRECT_URI=https://your-domain.com/api/callback
+TIKTOK_REDIRECT_URI=https://tiktok-login-test-1nj0i2pve-emilyseetos-projects.vercel.app
 ```
 
 ### Optional Variables
