@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: tiktok-login-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-docker.conf:/etc/nginx/nginx.conf:ro
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./api:/usr/share/nginx/html/api:ro
+    depends_on:
+      - nodejs
+    restart: unless-stopped
+
+  nodejs:
+    build: .
+    container_name: tiktok-login-nodejs
+    environment:
+      - NODE_ENV=production
+      - TIKTOK_CLIENT_KEY=${TIKTOK_CLIENT_KEY}
+      - TIKTOK_CLIENT_SECRET=${TIKTOK_CLIENT_SECRET}
+      - TIKTOK_REDIRECT_URI=${TIKTOK_REDIRECT_URI}
+    restart: unless-stopped
+    networks:
+      - tiktok-network
+
+networks:
+  tiktok-network:
+    driver: bridge

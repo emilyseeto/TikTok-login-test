@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Login Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .tiktok-button {
+            background: #000000;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+        .tiktok-button:hover {
+            transform: scale(1.05);
+        }
+        .response-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .response-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .response-content {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ff0050;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background-color: #d4edda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TikTok Login Test</h1>
+        <p>Click the button below to login with TikTok:</p>
+        
+        <button onclick="loginWithTikTok()" class="tiktok-button">
+            Continue with TikTok
+        </button>
+        
+        <div id="response-container" class="response-container" style="display: none;">
+            <div class="response-title">TikTok Login Response:</div>
+            <div id="response-content" class="response-content"></div>
+        </div>
+    </div>
+
+    <!-- Load configuration -->
+    <script src="config.js"></script>
+    
+    <script>
+
+        // Function to initiate TikTok login
+        function loginWithTikTok() {
+            // Generate a random state token for CSRF protection
+            const csrfState = Math.random().toString(36).substring(2, 15) + 
+                             Math.random().toString(36).substring(2, 15);
+            
+            // Store state in sessionStorage for verification
+            sessionStorage.setItem('tiktok_state', csrfState);
+            
+            // Build TikTok authorization URL
+            const authUrl = new URL('https://www.tiktok.com/v2/auth/authorize/');
+            authUrl.searchParams.set('client_key', TIKTOK_CONFIG.clientKey);
+            authUrl.searchParams.set('scope', TIKTOK_CONFIG.scope);
+            authUrl.searchParams.set('response_type', 'code');
+            authUrl.searchParams.set('redirect_uri', TIKTOK_CONFIG.redirectUri);
+            authUrl.searchParams.set('state', csrfState);
+            
+            // Redirect to TikTok authorization page
+            window.location.href = authUrl.toString();
+        }
+
+        // Check if we have response parameters in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+        const scopes = urlParams.get('scopes');
+        const success = urlParams.get('success');
+        const data = urlParams.get('data');
+
+        if (success === 'true' && data) {
+            // Handle successful login with full data
+            const responseContainer = document.getElementById('response-container');
+            const responseContent = document.getElementById('response-content');
+            
+            responseContainer.style.display = 'block';
+            responseContent.className = 'response-content success';
+            
+            try {
+                const loginData = JSON.parse(decodeURIComponent(data));
+                responseContent.textContent = JSON.stringify(loginData, null, 2);
+            } catch (e) {
+                responseContent.textContent = `Success! Data: ${data}`;
+            }
+        } else if (code || error) {
+            // Handle direct OAuth response
+            const responseContainer = document.getElementById('response-container');
+            const responseContent = document.getElementById('response-content');
+            
+            responseContainer.style.display = 'block';
+            
+            let responseText = '';
+            
+            if (error) {
+                responseContent.className = 'response-content error';
+                responseText = `Error: ${error}\n`;
+                if (errorDescription) {
+                    responseText += `Description: ${errorDescription}`;
+                }
+            } else {
+                // Verify state parameter
+                const storedState = sessionStorage.getItem('tiktok_state');
+                if (state !== storedState) {
+                    responseContent.className = 'response-content error';
+                    responseText = `Error: State parameter mismatch\n`;
+                    responseText += `Expected: ${storedState}\n`;
+                    responseText += `Received: ${state}`;
+                } else {
+                    responseContent.className = 'response-content success';
+                    responseText = `Authorization Code: ${code}\n`;
+                    responseText += `State: ${state}\n`;
+                    if (scopes) {
+                        responseText += `Granted Scopes: ${scopes}`;
+                    }
+                    
+                    // Clear the stored state
+                    sessionStorage.removeItem('tiktok_state');
+                }
+            }
+            
+            responseContent.textContent = responseText;
+        }
+    </script>
+</body>
+</html>

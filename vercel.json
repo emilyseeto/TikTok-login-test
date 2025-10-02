@@ -1,0 +1,16 @@
+{
+  "functions": {
+    "api/oauth.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/callback.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ]
+}
